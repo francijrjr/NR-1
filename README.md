@@ -61,7 +61,7 @@ Temos um ambiente configurado com Docker Compose para subir o SQL Server localme
    ```bash
    npm run dev
    ```
-   *Nota: Ao iniciar com sucesso, o console confirmará a conexão e criará automaticamente o usuário administrador padrão (`compliance@empresa.com.br` com a senha `AdminLeaoNR12026!`) se o banco estiver vazio.*
+ 
 
 ### 3. Configurar e Executar o Frontend (Porta 5173)
 1. Abra um novo terminal na raiz do projeto e acesse o diretório do frontend:

@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+}
+
+model UsuarioAdmin {
+  id           Int         @id @default(autoincrement())
+  nome         String      @db.VarChar(150)
+  email        String      @unique @db.VarChar(255)
+  senha        String      @db.VarChar(255)
+  data_criacao DateTime    @default(now()) @db.DateTime
+  historicos   Historico[]
+
+  @@map("usuarios_admin")
+}
+
+model Denuncia {
+  id                   Int         @id @default(autoincrement())
+  protocolo            String      @unique @db.VarChar(50)
+  tipo                 String      @db.VarChar(100)
+  setor                String      @db.VarChar(150)
+  data_fato            DateTime    @db.Date
+  descricao            String      @db.NVarChar(Max)
+  status               String      @default("Recebida") @db.VarChar(50)
+  deseja_retorno       Boolean     @default(false)
+  senha_acompanhamento String?     @db.VarChar(255)
+  data_criacao         DateTime    @default(now()) @db.DateTime
+  data_atualizacao     DateTime    @default(now()) @db.DateTime
+  anexos               Anexo[]
+  historicos           Historico[]
+
+  @@map("denuncias")
+}
+
+model Anexo {
+  id            Int      @id @default(autoincrement())
+  denuncia_id   Int
+  nome_original String   @db.VarChar(255)
+  nome_servidor String   @db.VarChar(255)
+  caminho       String   @db.VarChar(500)
+  tipo_mime     String   @db.VarChar(100)
+  tamanho       BigInt
+  data_criacao  DateTime @default(now()) @db.DateTime
+  denuncia      Denuncia @relation(fields: [denuncia_id], references: [id], onDelete: Cascade)
+
+  @@map("anexos")
+}
+
+model Historico {
+  id               Int           @id @default(autoincrement())
+  denuncia_id      Int
+  acao             String        @db.VarChar(100)
+  usuario_admin_id Int?
+  comentario       String        @db.NVarChar(Max)
+  data_criacao     DateTime      @default(now()) @db.DateTime
+  denuncia         Denuncia      @relation(fields: [denuncia_id], references: [id], onDelete: Cascade)
+  usuarioAdmin     UsuarioAdmin? @relation(fields: [usuario_admin_id], references: [id], onDelete: SetNull)
+
+  @@map("historico")
+}

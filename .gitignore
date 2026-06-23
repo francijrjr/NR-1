@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ambiente e Configurações
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Uploads de Denúncias
+public/uploads/*
+!public/uploads/.gitkeep
+
+# IDEs e logs
+.vscode/
+.idea/
+.DS_Store
+*.log

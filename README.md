@@ -27,7 +27,7 @@ Temos um ambiente configurado com Docker Compose para subir o SQL Server localme
    ```bash
    docker compose up -d
    ```
-   *Isso subirá um container com o SQL Server 2022 ouvindo na porta `1433` com a senha configurada no seu `.env` (`@@@LeaoSasa1!`).*
+   *Isso subirá um container com o SQL Server 2022 ouvindo na porta `1433` com a senha configurada no seu `.env` .*
 3. Caso queira interromper o container do banco futuramente:
    ```bash
    docker compose down
@@ -47,7 +47,7 @@ Temos um ambiente configurado com Docker Compose para subir o SQL Server localme
    - Duplique o arquivo `.env.example` e renomeie-o para `.env`.
    - Configure as credenciais de acesso ao seu SQL Server (usuário `sa`, servidor, porta e senha) nas variáveis individuais.
    - Configure a variável `DATABASE_URL` com as suas credenciais no formato padrão do Prisma:
-     `DATABASE_URL="sqlserver://localhost:1433;database=LeaoEscuta;user=sa;password=SUA_SENHA;encrypt=true;trustServerCertificate=true;"`
+   
 4. Gere o Prisma Client e sincronize a estrutura física de tabelas no banco de dados:
    ```bash
    # Sincronizar o banco de dados (Cria as tabelas e índices automaticamente)

@@ -42,12 +42,11 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Status Form State
+
   const [statusNovo, setStatusNovo] = useState('');
   const [comentarioStatus, setComentarioStatus] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
 
-  // Internal Note Form State
   const [notaInterna, setNotaInterna] = useState('');
   const [loadingNota, setLoadingNota] = useState(false);
 
@@ -219,14 +218,12 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
 
   return (
     <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
-      
-      {/* Header Impresso (Oculto na tela, visível em PDF) */}
+
       <div className="hidden print-only p-8 border-b-2 border-slate-300 mb-8">
         <h1 className="text-2xl font-bold">Relatório de Auditoria Ocupacional (PGR/NR-1)</h1>
         <p className="text-sm">Gerado pelo sistema **Leão Escuta** em {new Date().toLocaleDateString('pt-BR')}</p>
       </div>
 
-      {/* Barra de controle */}
       <div className="flex justify-between items-center mb-6 no-print">
         <button 
           onClick={onNavigateBack}
@@ -246,8 +243,7 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Esquerdo: Detalhes da Denúncia */}
+
         <div className="lg:col-span-2 space-y-6">
           
           <div className="glass-panel p-6 sm:p-8 rounded-2xl shadow-lg">
@@ -293,7 +289,6 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
 
           </div>
 
-          {/* Anexos */}
           <div className="glass-panel p-6 rounded-2xl shadow-md">
             <h3 className="font-bold text-slate-800 text-base mb-4 flex items-center">
               <FileText className="h-5 w-5 text-teal-600 mr-2" />
@@ -330,7 +325,6 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
             )}
           </div>
 
-          {/* Trilha Histórico */}
           <div className="glass-panel p-6 rounded-2xl shadow-sm">
             <h3 className="font-bold text-slate-800 text-base mb-6 border-b border-slate-100 pb-2">
               Trilha de Auditoria (NR-1 Compliance)
@@ -368,10 +362,8 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
 
         </div>
 
-        {/* Direito: Formulários de Status e Notas */}
         <div className="space-y-6 no-print">
           
-          {/* Formulário Status */}
           <div className="glass-panel p-6 rounded-2xl shadow-sm">
             <h3 className="font-bold text-slate-800 text-base mb-4 border-b border-slate-100 pb-2">
               Alterar Status da Apuração
@@ -419,7 +411,6 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
             </form>
           </div>
 
-          {/* Comentário Interno */}
           <div className="glass-panel p-6 rounded-2xl shadow-sm">
             <h3 className="font-bold text-slate-800 text-base mb-4 border-b border-slate-100 pb-2">
               Nota de Auditoria Interna (CIPA)
@@ -450,7 +441,6 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
             </form>
           </div>
 
-          {/* Stats Info */}
           <div className="glass-panel p-4 rounded-xl bg-slate-50 text-xs text-slate-600 space-y-1.5">
             <h4 className="font-bold text-slate-800 uppercase tracking-wider mb-2">Conformidade Legal</h4>
             <p><strong>Retorno habilitado:</strong> {denuncia.deseja_retorno ? 'Sim' : 'Não'}</p>

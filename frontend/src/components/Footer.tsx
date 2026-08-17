@@ -5,8 +5,7 @@ export const Footer: React.FC = () => {
     <footer className="bg-white border-t border-slate-200/80 mt-12 py-8 no-print">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm text-slate-600">
-          
-          {/* Bloco Institucional / Lei */}
+
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-slate-800 font-semibold">
               <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -19,7 +18,6 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Bloco Segurança / Anonimato */}
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-slate-800 font-semibold">
               <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -31,8 +29,6 @@ export const Footer: React.FC = () => {
               Não salvamos ou rastreamos o seu endereço IP nem metadados de rede. Seu relato é totalmente confidencial e seguro contra retaliações corporativas.
             </p>
           </div>
-
-          {/* Bloco Canal Integrado */}
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-slate-800 font-semibold">
               <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -51,7 +47,7 @@ export const Footer: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
           <div>
-            © 2026 Leão Escuta - Canal de Denúncias Anônimas NR-1. Todos os direitos reservados.
+            © 2026 NR1 - Canal de Denúncias Anônimas NR-1. Todos os direitos reservados.
           </div>
           <div className="flex space-x-4">
             <a href="#" className="hover:text-slate-400">Políticas de Privacidade</a>

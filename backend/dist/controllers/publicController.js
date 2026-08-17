@@ -8,7 +8,7 @@ const db_1 = require("../config/db");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const fs_1 = __importDefault(require("fs"));
-// Enviar e-mail de alerta para CIPA/Compliance (Sem expor o denunciante)
+
 async function enviarEmailAlerta(protocolo, tipoRisco) {
     if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
         console.log(`[Email Mock] Alerta de nova denúncia - Protocolo: ${protocolo}, Tipo: ${tipoRisco}. (Configure o SMTP no arquivo .env para envio real)`);
@@ -50,7 +50,6 @@ async function enviarEmailAlerta(protocolo, tipoRisco) {
         console.error('Erro ao enviar e-mail de notificação de denúncia:', error.message);
     }
 }
-// Helper para gerar senha aleatória simples
 function gerarSenhaAcompanhamento() {
     const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let senha = '';
@@ -59,7 +58,7 @@ function gerarSenhaAcompanhamento() {
     }
     return senha;
 }
-// 1. Registrar denúncia anônima
+
 const registrarDenuncia = async (req, res) => {
     const { tipo, setor, data_fato, descricao, deseja_retorno } = req.body;
     if (!tipo || !setor || !data_fato || !descricao) {
@@ -67,10 +66,8 @@ const registrarDenuncia = async (req, res) => {
     }
     const files = req.files;
     try {
-        // Executar todo o fluxo em transação para consistência
         const result = await db_1.prisma.$transaction(async (tx) => {
             const anoAtual = new Date().getFullYear();
-            // 1. Obter a contagem do ano corrente para a sequência do protocolo
             const totalNoAno = await tx.denuncia.count({
                 where: {
                     data_criacao: {
@@ -81,7 +78,6 @@ const registrarDenuncia = async (req, res) => {
             });
             const sequencia = (totalNoAno + 1).toString().padStart(5, '0');
             const protocolo = `LEAO-${anoAtual}-${sequencia}`;
-            // 2. Tratar a senha se solicitado retorno
             const querRetorno = deseja_retorno === 'on' || deseja_retorno === 'true' || deseja_retorno === true;
             let senhaCrua = '';
             let senhaHash = '';
@@ -89,7 +85,6 @@ const registrarDenuncia = async (req, res) => {
                 senhaCrua = gerarSenhaAcompanhamento();
                 senhaHash = await bcryptjs_1.default.hash(senhaCrua, 10);
             }
-            // 3. Criar a denúncia com relações aninhadas (anexos e histórico)
             await tx.denuncia.create({
                 data: {
                     protocolo,
@@ -119,7 +114,6 @@ const registrarDenuncia = async (req, res) => {
             });
             return { protocolo, senhaCrua, deseja_retorno: querRetorno };
         });
-        // Enviar notificação por e-mail em background
         enviarEmailAlerta(result.protocolo, tipo);
         return res.status(201).json({
             success: true,
@@ -130,7 +124,6 @@ const registrarDenuncia = async (req, res) => {
     }
     catch (error) {
         console.error('Erro ao salvar denúncia no banco com Prisma:', error);
-        // Limpar arquivos físicos carregados se houver falha
         if (files && files.length > 0) {
             files.forEach(file => {
                 if (fs_1.default.existsSync(file.path)) {
@@ -142,7 +135,7 @@ const registrarDenuncia = async (req, res) => {
     }
 };
 exports.registrarDenuncia = registrarDenuncia;
-// 2. Buscar e processar acompanhamento de denúncia
+
 const consultarDenuncia = async (req, res) => {
     const { protocolo, senha } = req.body;
     if (!protocolo || !senha) {
@@ -160,7 +153,6 @@ const consultarDenuncia = async (req, res) => {
         if (!denuncia.deseja_retorno || !denuncia.senha_acompanhamento) {
             return res.status(403).json({ error: 'Esta denúncia foi registrada de modo 100% fechado (sem solicitação de retorno).' });
         }
-        // Verificar senha
         const senhaValida = await bcryptjs_1.default.compare(senha.trim(), denuncia.senha_acompanhamento);
         if (!senhaValida) {
             return res.status(401).json({ error: 'Senha de acompanhamento incorreta.' });
@@ -179,7 +171,6 @@ const consultarDenuncia = async (req, res) => {
                 data_criacao: 'desc'
             }
         });
-        // Remover senha hash para segurança do tráfego JSON
         const cleanDenuncia = {
             id: denuncia.id,
             protocolo: denuncia.protocolo,

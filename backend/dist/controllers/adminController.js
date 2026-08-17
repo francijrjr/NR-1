@@ -26,7 +26,7 @@ const login = async (req, res) => {
         if (!senhaValida) {
             return res.status(401).json({ error: 'E-mail ou senha incorretos.' });
         }
-        // Assinar Token JWT (Expira em 4 horas)
+        // (Expira em 4 horas)
         const jwtSecret = process.env.JWT_SECRET || 'segredo_padrao_leao_escuta_2026_jwt';
         const token = jsonwebtoken_1.default.sign({ id: admin.id, nome: admin.nome, email: admin.email }, jwtSecret, { expiresIn: '4h' });
         return res.status(200).json({
@@ -45,11 +45,10 @@ const login = async (req, res) => {
     }
 };
 exports.login = login;
-// 2. Exibir Dashboard (Dados filtrados + Métricas estatísticas)
+
 const exibirDashboard = async (req, res) => {
     const { status, tipo, data_inicio, data_fim, busca } = req.query;
     try {
-        // Carregar estatísticas gerais
         const total = await db_1.prisma.denuncia.count();
         const recebidas = await db_1.prisma.denuncia.count({ where: { status: 'Recebida' } });
         const emAnalyse = await db_1.prisma.denuncia.count({ where: { status: 'Em Análise' } });
@@ -62,7 +61,6 @@ const exibirDashboard = async (req, res) => {
             em_apuracao: emApuracao,
             concluídas: concluidas
         };
-        // Montar filtros dinâmicos
         const where = {};
         if (status) {
             where.status = status;
@@ -116,7 +114,7 @@ const exibirDashboard = async (req, res) => {
     }
 };
 exports.exibirDashboard = exibirDashboard;
-// 3. Obter detalhes de uma denúncia específica
+
 const exibirDetalhes = async (req, res) => {
     const { id } = req.params;
     try {
@@ -141,14 +139,14 @@ const exibirDetalhes = async (req, res) => {
         if (!denuncia) {
             return res.status(404).json({ error: 'Denúncia não encontrada.' });
         }
-        // Converter BigInt do tamanho do arquivo para Number
+
         const cleanAnexos = denuncia.anexos.map(anexo => ({
             id: anexo.id,
             nome_original: anexo.nome_original,
             tamanho: Number(anexo.tamanho),
             data_criacao: anexo.data_criacao
         }));
-        // Formatar histórico para enviar o nome do admin ao invés do objeto
+
         const formattedHistoricos = denuncia.historicos.map(h => ({
             id: h.id,
             acao: h.acao,
@@ -156,7 +154,7 @@ const exibirDetalhes = async (req, res) => {
             data_criacao: h.data_criacao,
             admin_nome: h.usuarioAdmin?.nome || null
         }));
-        // Remover senha hash para segurança
+
         const cleanDenuncia = {
             id: denuncia.id,
             protocolo: denuncia.protocolo,
@@ -182,7 +180,7 @@ const exibirDetalhes = async (req, res) => {
     }
 };
 exports.exibirDetalhes = exibirDetalhes;
-// 4. Atualizar status com justificativa (auditoria)
+
 const atualizarStatus = async (req, res) => {
     const { id } = req.params;
     const { status_novo, comentario } = req.body;
@@ -192,7 +190,6 @@ const atualizarStatus = async (req, res) => {
     }
     try {
         await db_1.prisma.$transaction(async (tx) => {
-            // 1. Obter a denúncia original
             const original = await tx.denuncia.findUnique({
                 where: { id: parseInt(id, 10) },
                 select: { status: true }
@@ -200,7 +197,6 @@ const atualizarStatus = async (req, res) => {
             if (!original) {
                 throw new Error('Denúncia não localizada.');
             }
-            // 2. Atualizar o status e data de atualização
             await tx.denuncia.update({
                 where: { id: parseInt(id, 10) },
                 data: {
@@ -208,7 +204,6 @@ const atualizarStatus = async (req, res) => {
                     data_atualizacao: new Date()
                 }
             });
-            // 3. Criar registro no histórico para a trilha de auditoria
             await tx.historico.create({
                 data: {
                     denuncia_id: parseInt(id, 10),
@@ -229,7 +224,6 @@ const atualizarStatus = async (req, res) => {
     }
 };
 exports.atualizarStatus = atualizarStatus;
-// 5. Adicionar nota/comentário interno de auditoria
 const adicionarComentario = async (req, res) => {
     const { id } = req.params;
     const { comentario } = req.body;
@@ -239,7 +233,6 @@ const adicionarComentario = async (req, res) => {
     }
     try {
         await db_1.prisma.$transaction(async (tx) => {
-            // 1. Inserir nota no histórico
             await tx.historico.create({
                 data: {
                     denuncia_id: parseInt(id, 10),
@@ -248,7 +241,6 @@ const adicionarComentario = async (req, res) => {
                     comentario: comentario.trim()
                 }
             });
-            // 2. Atualizar data_atualizacao
             await tx.denuncia.update({
                 where: { id: parseInt(id, 10) },
                 data: { data_atualizacao: new Date() }
@@ -262,7 +254,7 @@ const adicionarComentario = async (req, res) => {
     }
 };
 exports.adicionarComentario = adicionarComentario;
-// 6. Download seguro de anexos
+
 const baixarAnexo = async (req, res) => {
     const { id } = req.params;
     try {
@@ -291,11 +283,10 @@ const baixarAnexo = async (req, res) => {
     }
 };
 exports.baixarAnexo = baixarAnexo;
-// 7. Exportar relatórios para PGR (CSV seguro)
+
 const exportarCSV = async (req, res) => {
     const { status, tipo, data_inicio, data_fim } = req.query;
     try {
-        // Montar filtros dinâmicos
         const where = {};
         if (status) {
             where.status = status;

@@ -221,7 +221,7 @@ export const AdminDetail: React.FC<AdminDetailProps> = ({ id, token, onNavigateB
 
       <div className="hidden print-only p-8 border-b-2 border-slate-300 mb-8">
         <h1 className="text-2xl font-bold">Relatório de Auditoria Ocupacional (PGR/NR-1)</h1>
-        <p className="text-sm">Gerado pelo sistema **Leão Escuta** em {new Date().toLocaleDateString('pt-BR')}</p>
+        <p className="text-sm">Gerado pelo sistema **NR1** em {new Date().toLocaleDateString('pt-BR')}</p>
       </div>
 
       <div className="flex justify-between items-center mb-6 no-print">

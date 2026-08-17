@@ -1,6 +1,6 @@
-# Leão Escuta — Canal de Denúncias Anônimas (Vite + React/TSX + Express/TypeScript)
+# NR1 — Canal de Denúncias Anônimas (Vite + React/TSX + Express/TypeScript)
 
-O **Leão Escuta** é um sistema web robusto, seguro e em conformidade para o relato e gestão de riscos ocupacionais e psicossociais. Projetado sob os princípios de **privacidade por padrão (privacy by design)**, ele atende aos requisitos da **NR-1 (Gestão de Riscos Ocupacionais - GRO)** e da **Lei nº 14.457/2022** (Prevenção e Combate ao Assédio no Ambiente de Trabalho).
+O **NR1** é um sistema web robusto, seguro e em conformidade para o relato e gestão de riscos ocupacionais e psicossociais. Projetado sob os princípios de **privacidade por padrão (privacy by design)**, ele atende aos requisitos da **NR-1 (Gestão de Riscos Ocupacionais - GRO)** e da **Lei nº 14.457/2022** (Prevenção e Combate ao Assédio no Ambiente de Trabalho).
 
 Esta versão foi estruturada de forma desacoplada:
 1. **`frontend/`**: Cliente Single Page Application (SPA) em React (TSX) com Vite e Tailwind CSS v3.

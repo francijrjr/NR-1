@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
-// 1. Helmet com CSP configurado
+
 export const helmetConfig = helmet({
   contentSecurityPolicy: {
     directives: {
@@ -15,7 +15,6 @@ export const helmetConfig = helmet({
   }
 });
 
-// 2. Rate Limiter Geral (DoS)
 export const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 150,
@@ -26,7 +25,6 @@ export const generalLimiter = rateLimit({
   legacyHeaders: false
 });
 
-// 3. Rate Limiter para novas denúncias (anti-spam)
 export const complaintLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 10,
@@ -37,7 +35,6 @@ export const complaintLimiter = rateLimit({
   legacyHeaders: false
 });
 
-// 4. Rate Limiter para Login Admin (força bruta)
 export const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -48,13 +45,12 @@ export const loginLimiter = rateLimit({
   legacyHeaders: false
 });
 
-// 5. Sanitizador recursivo de XSS
 export function sanitizeInput(req: Request, _res: Response, next: NextFunction): void {
   const sanitizeValue = (value: unknown): unknown => {
     if (typeof value === 'string') {
       return value
-        .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '') // Remove scripts
-        .replace(/<\/?[^>]+(>|$)/g, '')                     // Remove todas as tags HTML
+        .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '') 
+        .replace(/<\/?[^>]+(>|$)/g, '')                     
         .trim();
     }
     if (Array.isArray(value)) {

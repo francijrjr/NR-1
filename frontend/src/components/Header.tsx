@@ -12,8 +12,6 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate, adminNa
     <header className="glass-panel sticky top-0 z-50 border-b border-slate-200/80 no-print">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          
-          {/* Logo / Marca */}
           <div 
             onClick={() => onNavigate('form')} 
             className="flex items-center space-x-3 group cursor-pointer"
@@ -30,8 +28,6 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate, adminNa
               <span className="block text-[10px] text-slate-500 font-semibold tracking-widest uppercase">Canal Anônimo NR-1</span>
             </div>
           </div>
-
-          {/* Links de Navegação */}
           <nav className="flex items-center space-x-1 sm:space-x-4">
             {!adminName ? (
               <>

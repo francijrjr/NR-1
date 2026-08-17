@@ -7,7 +7,7 @@ exports.loginLimiter = exports.complaintLimiter = exports.generalLimiter = expor
 exports.sanitizeInput = sanitizeInput;
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const helmet_1 = __importDefault(require("helmet"));
-// 1. Helmet com CSP configurado
+
 exports.helmetConfig = (0, helmet_1.default)({
     contentSecurityPolicy: {
         directives: {
@@ -19,7 +19,6 @@ exports.helmetConfig = (0, helmet_1.default)({
         }
     }
 });
-// 2. Rate Limiter Geral (DoS)
 exports.generalLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
     max: 150,
@@ -29,7 +28,6 @@ exports.generalLimiter = (0, express_rate_limit_1.default)({
     standardHeaders: true,
     legacyHeaders: false
 });
-// 3. Rate Limiter para novas denúncias (anti-spam)
 exports.complaintLimiter = (0, express_rate_limit_1.default)({
     windowMs: 60 * 60 * 1000,
     max: 10,
@@ -39,7 +37,6 @@ exports.complaintLimiter = (0, express_rate_limit_1.default)({
     standardHeaders: true,
     legacyHeaders: false
 });
-// 4. Rate Limiter para Login Admin (força bruta)
 exports.loginLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000,
     max: 10,
@@ -49,13 +46,12 @@ exports.loginLimiter = (0, express_rate_limit_1.default)({
     standardHeaders: true,
     legacyHeaders: false
 });
-// 5. Sanitizador recursivo de XSS
 function sanitizeInput(req, _res, next) {
     const sanitizeValue = (value) => {
         if (typeof value === 'string') {
             return value
-                .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '') // Remove scripts
-                .replace(/<\/?[^>]+(>|$)/g, '') // Remove todas as tags HTML
+                .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '')
+                .replace(/<\/?[^>]+(>|$)/g, '') 
                 .trim();
         }
         if (Array.isArray(value)) {

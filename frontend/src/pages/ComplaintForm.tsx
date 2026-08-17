@@ -114,7 +114,7 @@ export const ComplaintForm: React.FC<ComplaintFormProps> = ({ onNavigate }) => {
           <ShieldCheck className="h-3.5 w-3.5" /> Anonimato Assegurado
         </span>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-800 mt-4 tracking-tight">
-          Canal de Denúncias <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-800">Leão Escuta</span>
+          Canal de Denúncias <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-800">NR1</span>
         </h1>
         <p className="text-slate-600 mt-3 max-w-2xl mx-auto text-base leading-relaxed">
           Sua manifestação contribui para a melhoria contínua da saúde ocupacional. Relate riscos, assédios ou não conformidades com garantia legal de <strong>não-retaliação</strong> (NR-1 e Lei nº 14.457/2022).

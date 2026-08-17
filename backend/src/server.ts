@@ -22,14 +22,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Garantir que as pastas de uploads existam
 const uploadsDir = path.resolve('public/uploads');
 
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// 1. Configuração do CORS flexível e seguro
 const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
 app.use(cors({
   origin: allowedOrigin,
@@ -38,14 +36,12 @@ app.use(cors({
   credentials: true
 }));
 
-// 2. Middlewares de Segurança
 app.use(security.helmetConfig);
 app.use(security.generalLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(security.sanitizeInput);
 
-// 3. Configuração do Multer (Upload Seguro de Evidências)
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, uploadsDir);
@@ -90,7 +86,6 @@ const upload = multer({
   fileFilter: uploadFilter
 });
 
-// Middleware auxiliar de tratamento de erros de upload Multer
 const handleUpload = (req: Request, res: Response, next: NextFunction) => {
   const uploadHandler = upload.array('anexos', 5);
   
@@ -111,14 +106,9 @@ const handleUpload = (req: Request, res: Response, next: NextFunction) => {
 // ROTAS DA API
 // ==========================================
 
-// Rotas Públicas (Denunciante)
 app.post('/api/denuncia', security.complaintLimiter, handleUpload, publicController.registrarDenuncia);
 app.post('/api/acompanhar', publicController.consultarDenuncia);
-
-// Rotas Administrativas (Autenticação JWT)
 app.post('/api/admin/login', security.loginLimiter, adminController.login);
-
-// Rotas Admin Protegidas
 app.get('/api/admin/dashboard', auth.requireAdmin, adminController.exibirDashboard);
 app.get('/api/admin/denuncia/:id', auth.requireAdmin, adminController.exibirDetalhes);
 app.post('/api/admin/denuncia/:id/status', auth.requireAdmin, adminController.atualizarStatus);
@@ -126,9 +116,7 @@ app.post('/api/admin/denuncia/:id/comentario', auth.requireAdmin, adminControlle
 app.get('/api/admin/anexo/baixar/:id', auth.requireAdmin, adminController.baixarAnexo);
 app.get('/api/admin/exportar/csv', auth.requireAdmin, adminController.exportarCSV);
 
-// ==========================================
-// INICIALIZAÇÃO E AUTO-SEMENTE (SEEDER)
-// ==========================================
+
 async function inicializarSistema() {
   try {
     console.log('Verificando se o usuário administrador padrão existe no banco de dados...');
@@ -162,7 +150,6 @@ async function inicializarSistema() {
       console.log('Usuário administrador padrão já cadastrado no SQL Server.');
     }
 
-    // Inicializar servidor
     app.listen(PORT, () => {
       console.log(`Servidor API "Leão Escuta" rodando na porta ${PORT}`);
     });
